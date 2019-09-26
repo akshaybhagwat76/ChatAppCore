@@ -1,0 +1,600 @@
+body {
+  margin: 0; }
+
+.outercont {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  position: absolute;
+  overflow: hidden; }
+  .outercont #bigimage {
+    width: 100vw;
+    height: 100vh;
+    background: rgba(51, 51, 51, 0.5);
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    z-index: 1000;
+    display: none; }
+    .outercont #bigimage img {
+      max-width: calc(100% - 50px);
+      max-height: calc(100% - 50px); }
+  .outercont .statscont {
+    display: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(51, 51, 51, 0.5);
+    z-index: 999; }
+    .outercont .statscont .statsdiv {
+      width: 80%;
+      height: 80%;
+      position: relative;
+      top: 10%;
+      left: 10%;
+      background: white; }
+      .outercont .statscont .statsdiv .chart {
+        width: calc(100% - 40px);
+        margin: 20px;
+        height: 40vh; }
+      .outercont .statscont .statsdiv .mininfos {
+        display: flex; }
+        .outercont .statscont .statsdiv .mininfos .mininfo {
+          width: 200px;
+          height: 200px;
+          margin: 10px 20px;
+          padding: 10px;
+          box-shadow: 0px 0px 15px 1px rgba(51, 51, 51, 0.5);
+          display: flex;
+          justify-content: center;
+          flex-direction: column; }
+          .outercont .statscont .statsdiv .mininfos .mininfo .texthead {
+            text-align: center;
+            font-size: 20px; }
+          .outercont .statscont .statsdiv .mininfos .mininfo .textval {
+            text-align: center;
+            font-size: 40px;
+            font-weight: 900; }
+  .outercont .allchats {
+    width: 25%;
+    height: 100vh; }
+    .outercont .allchats .messagehead {
+      width: 100%;
+      height: auto;
+      display: flex;
+      justify-content: center;
+      box-shadow: 0px 2px 5px 1px rgba(51, 51, 51, 0.5); }
+      .outercont .allchats .messagehead .messageheadText {
+        font-size: 30px;
+        font-weight: 800;
+        align-self: center;
+        margin-left: 10px;
+        padding: 10px 0px; }
+      .outercont .allchats .messagehead .messageheadIcon {
+        align-self: flex-end;
+        margin-left: auto;
+        font-size: 20px;
+        padding: 20px 10px; }
+        .outercont .allchats .messagehead .messageheadIcon:hover, .outercont .allchats .messagehead .messageheadIcon:focus {
+          background: rgba(51, 51, 51, 0.5); }
+    .outercont .allchats #chatdata {
+      overflow-y: auto;
+      height: calc(100% - 60px); }
+      .outercont .allchats #chatdata .singlechatlistitem {
+        padding: 10px;
+        user-select: none; }
+        .outercont .allchats #chatdata .singlechatlistitem:hover {
+          background: rgba(27, 158, 103, 0.4); }
+        .outercont .allchats #chatdata .singlechatlistitem.selected {
+          background: rgba(27, 158, 103, 0.4); }
+        .outercont .allchats #chatdata .singlechatlistitem .chatname {
+          font-size: 20px;
+          line-height: 30px; }
+        .outercont .allchats #chatdata .singlechatlistitem .chatstatus {
+          font-size: 14px;
+          color: rgba(51, 51, 51, 0.9); }
+          .outercont .allchats #chatdata .singlechatlistitem .chatstatus i {
+            color: rgba(27, 158, 103, 0.8); }
+  .outercont .singlechat {
+    width: 45%;
+    height: 100vh; }
+    .outercont .singlechat #overlaywrapper {
+      z-index: 200;
+      bottom: 100px;
+      height: 100%;
+      right: 15px;
+      background-color: transparent; }
+      .outercont .singlechat #overlaywrapper.inactive {
+        bottom: -300px;
+        cursor: default; }
+        .outercont .singlechat #overlaywrapper.inactive #MessageboxMainContainer .actualmessagebody #MessageboxHeader > div {
+          pointer-events: none; }
+        .outercont .singlechat #overlaywrapper.inactive #MessageboxMainContainer .actualmessagebody #MessageboxHeader .MessageOptions .Messagesettings i {
+          display: none; }
+      .outercont .singlechat #overlaywrapper #MessageboxMainContainer {
+        height: 100%;
+        width: 100%;
+        position: relative;
+        border-radius: 0px 0px 5px 5px;
+        border: 1px solid rgba(191, 191, 191, 0.8);
+        transition: 2s ease forwards;
+        background: rgba(191, 191, 191, 0.2); }
+        .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody {
+          width: auto;
+          height: 100%;
+          pointer-events: none;
+          display: flex;
+          flex-direction: column; }
+          .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody {
+            flex: 1;
+            pointer-events: all;
+            display: flex;
+            margin-bottom: 5px;
+            height: 350px;
+            overflow: hidden;
+            position: relative;
+            z-index: -1; }
+            .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .addFileOVerlay {
+              width: calc(100% - 10px);
+              position: absolute;
+              height: calc(100% - 10px);
+              border: 2px dashed;
+              margin: 5px;
+              display: none;
+              justify-content: center;
+              align-items: center;
+              background: white;
+              z-index: 20; }
+            .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbarcontainer {
+              z-index: 100;
+              position: absolute;
+              right: 0;
+              width: 5px;
+              background-color: rgba(191, 191, 191, 0.2);
+              height: 100%; }
+              .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbarcontainer:hover {
+                width: 10px; }
+              .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbarcontainer .scrollbar {
+                position: absolute;
+                height: 50px;
+                width: 15px;
+                border-radius: 3px;
+                background-color: rgba(236, 94, 42, 0.589); }
+            .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay {
+              width: calc(100% + 20px); }
+              .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller {
+                height: 100%;
+                position: relative;
+                overflow-y: scroll;
+                width: calc(100% + 20px); }
+                .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container {
+                  position: absolute;
+                  width: calc(100% - 10px);
+                  padding-right: 10px; }
+                  .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container #seentags {
+                    position: absolute;
+                    height: 100%;
+                    width: 100%;
+                    z-index: -1;
+                    pointer-events: none; }
+                    .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container #seentags .singleseentag {
+                      position: relative;
+                      left: calc(100% - 20px);
+                      border-radius: 50%;
+                      overflow: hidden;
+                      width: 15px;
+                      height: 15px;
+                      display: none;
+                      color: rgba(27, 158, 103, 0.8); }
+                  .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer {
+                    height: auto;
+                    width: 100%;
+                    align-self: flex-end;
+                    display: flex;
+                    flex-direction: column; }
+                    .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer #istypingmsg {
+                      display: none; }
+                    .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .singleMessage {
+                      width: 100%;
+                      min-height: 40px;
+                      flex-shrink: none;
+                      height: auto;
+                      align-self: center;
+                      align-items: flex-start;
+                      margin: 15px 0px 10px 0px;
+                      padding: 3px; }
+                      .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .singleMessage .actualmessage {
+                        width: auto;
+                        min-width: 30px;
+                        min-height: 30px;
+                        max-width: 70%;
+                        padding: 5px 5px 0px 5px;
+                        line-height: 120%;
+                        overflow-wrap: break-word;
+                        box-shadow: 2px 1px 1px rgba(191, 191, 191, 0.8);
+                        margin-top: 3px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: baseline;
+                        overflow: hidden; }
+                        .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .singleMessage .actualmessage #playctrls {
+                          display: inline-block;
+                          padding: 3px;
+                          margin-right: 3px; }
+                          .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .singleMessage .actualmessage #playctrls i {
+                            display: none; }
+                          .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .singleMessage .actualmessage #playctrls:hover {
+                            background: rgba(51, 51, 51, 0.5); }
+                        .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .singleMessage .actualmessage img {
+                          max-height: 200px; }
+                      .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .singleMessage .userpic {
+                        height: 30px;
+                        width: 30px;
+                        border-radius: 50%;
+                        margin: 0px 5px 0px 5px;
+                        border: 1px solid #bfbfbf;
+                        flex-shrink: 0;
+                        overflow: hidden; }
+                    .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .anotheruser {
+                      display: flex;
+                      align-items: left;
+                      flex-direction: reverse;
+                      position: relative; }
+                      .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .anotheruser .actualmessage {
+                        text-align: left;
+                        border-radius: 0px 10px 10px 10px;
+                        background: rgba(191, 191, 191, 0.5);
+                        position: relative; }
+                      .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .anotheruser .nametag {
+                        position: absolute;
+                        font-size: 14px;
+                        top: -16px;
+                        color: rgba(51, 51, 51, 0.5);
+                        left: 40px; }
+                    .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .currentuser {
+                      display: flex;
+                      align-items: right;
+                      flex-direction: row-reverse; }
+                      .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody .msgboxBody .scrollbaroverlay .singleMessageScroller .singleMessage1Container .singleMessageContainer .currentuser .actualmessage {
+                        text-align: right;
+                        border-radius: 10px 0px 10px 10px;
+                        background: rgba(27, 158, 103, 0.8);
+                        color: white; }
+          .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody #cannedcont {
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            margin-bottom: 120px;
+            display: none; }
+            .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody #cannedcont .singlecan {
+              background: rgba(51, 51, 151, 0.2);
+              width: 100%;
+              height: auto;
+              padding: 10px;
+              display: block;
+              pointer-events: all; }
+              .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody #cannedcont .singlecan:hover {
+                background: rgba(51, 51, 151, 0.5); }
+              .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody #cannedcont .singlecan .cannedshort {
+                color: blue;
+                pointer-events: none; }
+              .outercont .singlechat #overlaywrapper #MessageboxMainContainer .actualmessagebody #cannedcont .singlecan .cannedlong {
+                font-size: 14px;
+                padding-left: 15px;
+                pointer-events: none; }
+  .outercont .userinfo {
+    width: 30%;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden; }
+    .outercont .userinfo .singleentry {
+      width: calc(100% - 40px);
+      padding: 10px;
+      display: flex;
+      justify-content: space-between; }
+      .outercont .userinfo .singleentry .datatext {
+        font-size: 16px;
+        color: rgba(51, 51, 51, 0.8); }
+      .outercont .userinfo .singleentry .datavalue {
+        font-size: 16px; }
+    .outercont .userinfo .mutebtn {
+      color: orange;
+      padding: 10px;
+      display: block;
+      user-select: none;
+      cursor: pointer; }
+      .outercont .userinfo .mutebtn:hover, .outercont .userinfo .mutebtn:focus {
+        text-decoration: underline; }
+    .outercont .userinfo .deletebtn {
+      color: red;
+      padding: 10px;
+      cursor: pointer;
+      display: block;
+      user-select: none; }
+      .outercont .userinfo .deletebtn:hover, .outercont .userinfo .deletebtn:focus {
+        text-decoration: underline; }
+  .outercont .sidebarcont {
+    width: 65px;
+    height: 100%;
+    background: #555555;
+    display: flex;
+    flex-direction: column; }
+    .outercont .sidebarcont .singleitemm {
+      width: 25px;
+      height: 25px;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white; }
+      .outercont .sidebarcont .singleitemm:hover {
+        background: rgba(51, 51, 51, 0.8); }
+  .outercont .itemdata {
+    display: block;
+    width: calc(100% - 40px);
+    height: 100%;
+    overflow: hidden; }
+    .outercont .itemdata .singleitemdata {
+      display: flex;
+      flex-grow: 1;
+      flex-direction: column;
+      width: 100%;
+      height: 100%; }
+      .outercont .itemdata .singleitemdata .title {
+        padding: 0px 5px;
+        width: 100%;
+        height: 60px;
+        font-weight: 900;
+        font-size: 30px;
+        box-shadow: 0px 1px 3px 1px rgba(51, 51, 51, 0.5);
+        padding: 10px; }
+    .outercont .itemdata .dashboard {
+      display: none; }
+      .outercont .itemdata .dashboard .visitors {
+        width: calc(100%-40px);
+        margin: 20px;
+        background: red;
+        height: 350px; }
+      .outercont .itemdata .dashboard .smalldata {
+        display: flex;
+        flex-wrap: wrap;
+        width: calc(100%-40px);
+        margin: 20px; }
+        .outercont .itemdata .dashboard .smalldata .singlesmalldata {
+          background: green;
+          width: 150px;
+          height: 150px;
+          margin: 20px; }
+    .outercont .itemdata .incomingchat .contentcont {
+      width: 100%;
+      height: 100%; }
+      .outercont .itemdata .incomingchat .contentcont .chatsview, .outercont .itemdata .incomingchat .contentcont .chatview {
+        height: 100%;
+        width: 100%; }
+    .outercont .itemdata .incomingchat .groups {
+      display: none;
+      height: 100%; }
+      .outercont .itemdata .incomingchat .groups .contentcont {
+        display: flex;
+        flex-direction: row;
+        height: 100%; }
+        .outercont .itemdata .incomingchat .groups .contentcont .itemslist {
+          width: 250px;
+          height: 100%;
+          background: #444444; }
+          .outercont .itemdata .incomingchat .groups .contentcont .itemslist .singlelistitem {
+            color: white;
+            padding: 5px; }
+            .outercont .itemdata .incomingchat .groups .contentcont .itemslist .singlelistitem:hover {
+              background: rgba(51, 51, 51, 0.5); }
+
+table {
+  width: 100%;
+  background: white; }
+  table thead {
+    background-color: #cccccc; }
+  table tbody, table thead {
+    width: 100%;
+    padding: 15px; }
+    table tbody tr, table thead tr {
+      height: 40px; }
+      table tbody tr th, table tbody tr td, table thead tr th, table thead tr td {
+        cursor: default;
+        text-align: center;
+        border: solid 1px rgba(51, 51, 51, 0.1); }
+    table tbody tr:nth-child(even), table thead tr:nth-child(even) {
+      background-color: #cccccc; }
+  table tbody tr:hover {
+    background: rgba(51, 51, 51, 0.4); }
+
+.chatview {
+  display: none; }
+
+.msgboxInputcontainer {
+  pointer-events: all;
+  height: auto;
+  flex-shrink: 0;
+  border-top: 1px solid #bfbfbf;
+  display: flex;
+  flex-direction: row;
+  position: relative; }
+  .msgboxInputcontainer.inactive {
+    pointer-events: none; }
+  .msgboxInputcontainer .textareact {
+    border: 0;
+    height: 120px;
+    padding: 0px 6px 0px 6px;
+    outline: none;
+    flex: 1; }
+    .msgboxInputcontainer .textareact #textarea {
+      width: 100%; }
+  .msgboxInputcontainer .emojionearea {
+    min-height: 40px; }
+  .msgboxInputcontainer .inputsContainer {
+    height: 40px;
+    align-items: center;
+    padding: 3px;
+    display: flex; }
+    .msgboxInputcontainer .inputsContainer .imageInput, .msgboxInputcontainer .inputsContainer .voiceInput, .msgboxInputcontainer .inputsContainer .fileInput {
+      height: 25px;
+      margin: 2px;
+      width: 25px;
+      border-radius: 3px;
+      background: rgba(191, 191, 191, 0.8);
+      overflow: hidden;
+      position: relative; }
+      .msgboxInputcontainer .inputsContainer .imageInput:hover, .msgboxInputcontainer .inputsContainer .voiceInput:hover, .msgboxInputcontainer .inputsContainer .fileInput:hover {
+        background-color: #bfbfbf; }
+      .msgboxInputcontainer .inputsContainer .imageInput input, .msgboxInputcontainer .inputsContainer .voiceInput input, .msgboxInputcontainer .inputsContainer .fileInput input {
+        opacity: 0;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 500px;
+        height: 500px;
+        font-size: 70;
+        z-index: 100; }
+  .msgboxInputcontainer .reorderbox {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: white;
+    padding: 3px 10px;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none; }
+    .msgboxInputcontainer .reorderbox.isrecording #recordbutton {
+      display: none; }
+    .msgboxInputcontainer .reorderbox.isrecording .recordstopbtncont {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row; }
+      .msgboxInputcontainer .reorderbox.isrecording .recordstopbtncont .soundlevel {
+        width: 25px;
+        display: flex;
+        flex-direction: column;
+        height: 100%; }
+        .msgboxInputcontainer .reorderbox.isrecording .recordstopbtncont .soundlevel div {
+          height: 2px;
+          margin-top: 1px;
+          background: black;
+          opacity: 0.3;
+          display: flex;
+          justify-content: center;
+          align-items: center; }
+          .msgboxInputcontainer .reorderbox.isrecording .recordstopbtncont .soundlevel div.active {
+            opacity: 1; }
+      .msgboxInputcontainer .reorderbox.isrecording .recordstopbtncont #recordstopbutton {
+        display: flex; }
+    .msgboxInputcontainer .reorderbox .recordstopbtncont {
+      display: none; }
+      .msgboxInputcontainer .reorderbox .recordstopbtncont #recordstopbutton {
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        background: red;
+        margin: 0 auto;
+        display: none;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        opacity: 0.8;
+        margin-left: 3px; }
+        .msgboxInputcontainer .reorderbox .recordstopbtncont #recordstopbutton i {
+          color: white;
+          font-size: 20px; }
+        .msgboxInputcontainer .reorderbox .recordstopbtncont #recordstopbutton.isrecording {
+          animation: fadeinandout 2s infinite; }
+    .msgboxInputcontainer .reorderbox #recordbutton {
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      background: black;
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center; }
+      .msgboxInputcontainer .reorderbox #recordbutton i {
+        color: white;
+        font-size: 20px; }
+  .msgboxInputcontainer .recordbuttonexit {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    top: 10px; }
+    .msgboxInputcontainer .recordbuttonexit:hover {
+      transform: scale(1.2); }
+
+.emojionearea > .emojionearea-editor {
+  min-height: 40px;
+  max-height: 40px; }
+
+#istypingbox {
+  bottom: 0;
+  display: flex;
+  flex-direction: row;
+  width: auto; }
+  #istypingbox .first, #istypingbox .second, #istypingbox .third {
+    align-self: flex-end;
+    height: 10px;
+    width: 10px;
+    margin: 2px;
+    border-radius: 50%;
+    background-color: #6f6f6f;
+    transform: translateY(13px); }
+  #istypingbox .first {
+    animation: typinganim 1.5s infinite;
+    animation-delay: 0s; }
+  #istypingbox .second {
+    animation: typinganim 1.5s infinite;
+    animation-delay: 0.15s; }
+  #istypingbox .third {
+    animation: typinganim 1.5s infinite;
+    animation-delay: 0.3s; }
+
+@keyframes typinganim {
+  0% {
+    transform: translateY(13px); }
+  70% {
+    transform: translateY(0px); }
+  100% {
+    transform: translateY(13px); } }
+.newUser {
+  background: green;
+  color: white;
+  padding: 2;
+  border-radius: 5px 5px 5px 0px;
+  margin-left: 3px;
+  float: top;
+  padding: 5px; }
+
+.newMessage {
+  background: yellow;
+  color: black;
+  padding: 2;
+  border-radius: 5px 5px 5px 0px;
+  margin-left: 3px;
+  float: top;
+  padding: 5px; }
+
+.a-dot-circle {
+  color: green; }
+
+#chaticon {
+  background: red;
+  border-radius: 50%;
+  padding: 5px;
+  display: none; }
+
+@keyframes fadeinandout {
+  0% {
+    opacity: 0.8; }
+  50% {
+    opacity: 0.1; }
+  100% {
+    opacity: 0.8; } }
+
+/*# sourceMappingURL=dashboardstyle.css.map */

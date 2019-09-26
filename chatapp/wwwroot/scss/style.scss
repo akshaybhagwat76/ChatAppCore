@@ -1,0 +1,897 @@
+body {
+    font-family: 'Sarabun', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+$transhadow: rgba(191,191,191,0.8);
+$verylowtranshadow: rgba(191,191,191,0.2);
+$lowtranshadow: rgba(191,191,191,0.4);
+$shadow: rgb(191,191,191);
+
+#bodyoverlay {
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+
+    #bigimage {
+        display: none;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        z-index: 20000;
+        background: rgba(51,51,51,0.8);
+
+        img {
+            max-width: calc(100% - 50px);
+            max-height: calc(100% - 50px);
+        }
+
+        #bigimagecross {
+            top: 50px;
+            position: absolute;
+            right: 50px;
+            display: block;
+            color: white;
+        }
+    }
+
+    #overlaywrapper {
+        position: fixed;
+        z-index: 20;
+        bottom: 100px;
+        width: auto;
+        height: auto;
+        vertical-align: 200;
+        right: 0;
+        background-color: transparent;
+
+        &.inactive {
+            bottom: -300px;
+            cursor: default;
+            bottom: -260px;
+
+            #MessageboxMainContainer {
+                .actualmessagebody {
+                    #MessageboxHeader {
+                        > div {
+                            pointer-events: none;
+                        }
+
+                        .MessageOptions {
+                            .Messagesettings {
+                                i {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        #MessageboxMainContainer {
+            height: auto;
+            width: 300px;
+            top: 100px;
+            margin-top: 40px;
+            position: relative;
+            border-radius: 0px 0px 5px 5px;
+            border: 1px solid $transhadow;
+            transition: 2s ease forwards;
+            background: $verylowtranshadow;
+
+            &.initquestactive {
+                .actualmessagebody {
+                    .msgboxBody {
+                        .initialquests {
+                            display: block;
+                        }
+                    }
+
+                    .msgboxInputcontainer {
+                        display: none;
+                    }
+                }
+            }
+
+            .actualmessagebody {
+                width: auto;
+                height: auto;
+                pointer-events: none;
+
+
+                #MessageboxHeader {
+                    pointer-events: all;
+                    transition: 0.5s ease forwards;
+                    width: 100%;
+                    height: 50px;
+                    background-color: #72b626;
+                    opacity: 0.8;
+
+                    .UserDetails {
+                        padding-top: 1px;
+                        margin: 0 auto;
+                        text-align: center;
+                        pointer-events: none;
+
+                        .Username {
+                            font-size: 24px;
+                            padding: 5px 0px 15px 0px;
+                            color: white;
+                        }
+
+                        .UserActiveStatus {
+                            font-size: 14px;
+                            color: white;
+                            margin-top: -25px;
+                        }
+                    }
+
+                    .settingView {
+                        display: none;
+                        background: white;
+                        width: calc(100% - 50px);
+                        height: auto;
+                        margin-left: auto;
+                        margin-right: 3px;
+                        padding: 5px 10px;
+                        position: relative;
+                        box-shadow: 0px 0px 2px 2px rgba(0,0,0,0.5);
+                        z-index: 500;
+                        background: white;
+                        border-radius: 2px;
+
+                        &::before {
+                            content: "";
+                            width: 0;
+                            height: 0;
+                            border-left: 8px solid transparent;
+                            border-right: 7px solid transparent;
+                            border-bottom: 8px solid white;
+                            top: -8px;
+                            position: absolute;
+                            right: 5px;
+                            z-index: 100;
+                        }
+
+
+                        .singlerow {
+                            display: flex;
+                            margin: 5px 0px;
+
+                            #profilepic {
+                                height: 50px;
+                                width: 50px;
+                                border-radius: 50%;
+                                position: relative;
+                                overflow: hidden;
+
+                                img {
+                                    height: 50px;
+                                    width: 50px;
+                                }
+
+                                &:hover {
+                                    .pencilicon {
+                                        display: flex;
+                                    }
+                                }
+
+                                .pencilicon {
+                                    background: rgba(51,51,51,0.5);
+                                    position: absolute;
+                                    width: 100%;
+                                    height: 100%;
+                                    pointer-events: none;
+                                    justify-content: center;
+                                    align-items: center;
+                                    display: none;
+
+                                    i {
+                                        color: white;
+                                    }
+                                }
+
+                                #newimginput {
+                                    font-size: 100px;
+                                    opacity: 0;
+                                    position: absolute;
+                                }
+                            }
+
+                            .namecont {
+                                padding: 0px 10px;
+                                display: flex;
+                                width: calc(100% - 50px);
+                                flex-direction: column;
+
+                                .nameoptionscont {
+                                    display: flex;
+
+                                    div {
+                                        flex-grow: 1;
+                                    }
+
+                                    i {
+                                        margin-right: 0;
+                                        margin-left: auto;
+                                        flex-grow: 0;
+                                        padding: 0px 3px;
+
+                                        &:hover {
+                                            transform: scale(1.2);
+                                        }
+                                    }
+
+                                    #savename, #cancelname {
+                                        display: none;
+                                    }
+
+                                    #savename {
+                                        &:hover {
+                                            color: limegreen;
+                                        }
+                                    }
+
+                                    #cancelname {
+                                        &:hover {
+                                            color: red;
+                                        }
+                                    }
+
+                                    #showoptionbtn {
+                                        &:hover {
+                                            color: orangered;
+                                        }
+                                    }
+                                }
+
+                                &.nameactive {
+                                    .nameoptionscont {
+
+                                        #savename, #cancelname {
+                                            display: block;
+                                        }
+
+                                        #showoptionbtn {
+                                            color: orangered;
+                                            display: none;
+                                        }
+                                    }
+
+                                    #thisusernameinput {
+                                        display: block;
+                                    }
+
+                                    #thisusername {
+                                        display: none;
+                                    }
+                                }
+
+                                #thisusername {
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    white-space: nowrap;
+                                    display: block;
+                                }
+
+                                #thisusernameinput {
+                                    display: none;
+                                }
+                            }
+                        }
+                    }
+
+
+                    .BoxOptions {
+                        align-self: flex-start;
+                        position: absolute;
+
+                        .StayonTopOption {
+                            color: rgb(91,91,91);
+                            padding: 3px;
+
+                            &:hover {
+                                color: rgb(51,51,51);
+                            }
+                        }
+
+                        @media only screen and (max-width: 600px) {
+                            .StayonTopOption {
+                                display: none;
+                            }
+                        }
+                    }
+
+                    .MessageOptions {
+                        position: absolute;
+                        right: 0;
+
+                        .Messagesettings {
+                            font-size: 23px;
+                            color: rgb(91,91,91);
+                            padding: 3px;
+
+                            &:hover {
+                                color: rgb(51,51,51);
+                            }
+                        }
+                    }
+                }
+
+                .msgboxBody {
+                    flex: 1;
+                    pointer-events: all;
+                    display: flex;
+                    margin-bottom: 5px;
+                    height: 350px;
+                    overflow: hidden;
+                    position: relative;
+                    z-index: -1;
+
+                    .initialquests {
+                        width: 100%;
+                        height: 100%;
+                        background: white;
+                        padding: 30px;
+                        position: absolute;
+                        z-index: 500;
+                        display: none;
+
+                        .textcont {
+                            margin-bottom: 2px;
+                        }
+
+                        .textname {
+                            width: 100%;
+                            height: 40px;
+                            display: block;
+                            margin-bottom: 10px;
+                            border-radius: 5px;
+                            outline: none;
+                            padding: 5px;
+                            border: 1px solid rgba(51,51,51,0.5);
+
+                            &:hover, &:focus {
+                                border: 1px solid rgba(51,51,51,0.8);
+                            }
+                        }
+
+                        .startchat {
+                            color: white;
+                            padding: 5px;
+                            background: #72b626;
+                            border-radius: 5px;
+                            border: 0;
+                            margin: 0 auto;
+                            width: 150px;
+                            margin: 20px auto;
+                            height: 40px;
+                            display: block;
+
+                            &:hover {
+                                background: #82c636;
+                            }
+                        }
+
+                        #notnullmsg {
+                            text-align: center;
+                            color: red;
+                        }
+                    }
+
+                    .addFileOVerlay {
+                        width: calc(100% - 10px);
+                        position: absolute;
+                        height: calc(100% - 10px);
+                        border: 2px dashed;
+                        margin: 5px;
+                        display: none;
+                        justify-content: center;
+                        align-items: center;
+                        background: white;
+                        z-index: 20;
+                    }
+
+                    .scrollbarcontainer {
+                        z-index: 100;
+                        position: absolute;
+                        right: 0;
+                        width: 5px;
+                        background-color: $verylowtranshadow;
+                        height: 100%;
+
+                        &:hover {
+                            width: 10px;
+                        }
+
+                        .scrollbar {
+                            position: absolute;
+                            height: 50px;
+                            width: 15px;
+                            border-radius: 3px;
+                            background-color: rgba(236, 94, 42, 0.589);
+                        }
+                    }
+
+                    .scrollbaroverlay {
+                        width: calc(100% + 20px);
+
+                        .singleMessageScroller {
+                            height: 100%;
+                            position: relative;
+                            overflow-y: scroll;
+                            width: calc(100% + 20px);
+
+                            .singleMessage1Container {
+                                position: absolute;
+                                width: calc(100% - 10px);
+                                padding-right: 10px;
+
+                                #seentags {
+                                    position: absolute;
+                                    height: 100%;
+                                    width: 100%;
+                                    z-index: -1;
+                                    pointer-events: none;
+                                    color: rgba(27, 158, 103, 0.8);
+
+                                    .singleseentag {
+                                        position: relative;
+                                        left: calc(100% - 20px);
+                                        border-radius: 50%;
+                                        overflow: hidden;
+                                        width: 15px;
+                                        height: 15px;
+                                        display: none;
+                                        color: rgba(27, 158, 103, 0.8);
+                                    }
+                                }
+
+                                .singleMessageContainer {
+                                    height: auto;
+                                    width: 100%;
+                                    align-self: flex-end;
+                                    display: flex;
+                                    flex-direction: column;
+
+                                    #istypingmsg {
+                                        display: none;
+                                    }
+
+                                    .singleMessage {
+                                        width: 100%;
+                                        min-height: 40px;
+                                        flex-shrink: none;
+                                        height: auto;
+                                        align-self: center;
+                                        align-items: flex-start;
+                                        margin: 15px 0px 10px 0px;
+                                        padding: 3px;
+
+
+
+                                        .actualmessage {
+                                            width: auto;
+                                            //height: 90px;
+                                            min-width: 30px;
+                                            min-height: 30px;
+                                            max-width: 70%;
+                                            padding: 5px 5px 0px 5px;
+                                            line-height: 120%;
+                                            overflow-wrap: break-word;
+                                            box-shadow: 2px 1px 1px $transhadow;
+                                            margin-top: 3px;
+                                            display: flex;
+                                            justify-content: center;
+                                            align-items: baseline;
+                                            overflow: hidden;
+
+                                            #playctrls {
+                                                display: inline-block;
+                                                padding: 3px;
+                                                margin-right: 3px;
+
+                                                i {
+                                                    display: none;
+                                                }
+
+                                                &:hover {
+                                                    background: rgba(51,51,51,0.5);
+                                                }
+                                            }
+
+                                            img {
+                                                max-height: 200px;
+                                            }
+                                        }
+
+                                        .userpic {
+                                            height: 30px;
+                                            width: 30px;
+                                            border-radius: 50%;
+                                            margin: 0px 5px 0px 5px;
+                                            border: 1px solid $shadow;
+                                            flex-shrink: 0;
+                                            overflow: hidden;
+                                        }
+                                    }
+
+                                    .anotheruser {
+                                        display: flex;
+                                        flex-direction: row;
+                                        position: relative;
+
+                                        .actualmessage {
+                                            text-align: left;
+                                            border-radius: 0px 10px 10px 10px;
+                                            background: rgba(191,191,191,0.5);
+                                            position: relative;
+                                        }
+
+                                        .nametag {
+                                            position: absolute;
+                                            font-size: 14px;
+                                            top: -16px;
+                                            color: rgba(51,51,51,0.5);
+                                            left: 40px;
+                                        }
+                                    }
+
+                                    .currentuser {
+                                        display: flex;
+                                        flex-flow: nowrap;
+                                        flex-direction: row-reverse;
+
+                                        .actualmessage {
+                                            text-align: right;
+                                            border-radius: 10px 0px 10px 10px;
+                                            background: rgba(27, 158, 103, 0.8);
+                                            color: white;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                #cannedcont {
+                    width: 100%;
+                    position: absolute;
+                    bottom: 0;
+                    margin-bottom: 40px;
+                    display: none;
+
+                    .singlecan {
+                        background: rgba(51,51,151,0.2);
+                        width: 100%;
+                        height: auto;
+                        padding: 10px;
+                        display: block;
+                        pointer-events: all;
+
+                        &:hover {
+                            background: rgba(51,51,151,0.5);
+                        }
+
+                        &.canselected {
+                            background: rgba(51,51,151,0.5);
+                        }
+
+                        .cannedshort {
+                            color: blue;
+                            pointer-events: none;
+                        }
+
+                        .cannedlong {
+                            font-size: 14px;
+                            padding-left: 15px;
+                            pointer-events: none;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .typing {
+        bottom: 0;
+        display: flex;
+        flex-direction: row;
+        width: auto;
+
+        .first, .second, .third {
+            align-self: flex-end;
+            height: 10px;
+            width: 10px;
+            margin: 2px;
+            border-radius: 50%;
+            background-color: rgb(111,111,111);
+            transform: translateY(13px)
+        }
+
+        .first {
+            animation: typinganim 1.5s infinite;
+            animation-delay: 0s;
+        }
+
+        .second {
+            animation: typinganim 1.5s infinite;
+            animation-delay: 0.15s;
+        }
+
+        .third {
+            animation: typinganim 1.5s infinite;
+            animation-delay: 0.3s;
+        }
+    }
+
+    @keyframes typinganim {
+        0% {
+            transform: translateY(13px);
+        }
+
+        70% {
+            transform: translateY(0px);
+        }
+
+        100% {
+            transform: translateY(13px);
+        }
+    }
+}
+
+@keyframes fadeinanddisplay {
+    0% {
+        display: block;
+        height: 0px;
+    }
+
+    100% {
+        height: 450px;
+    }
+}
+
+@keyframes fadeoutandhide {
+    0% {
+        height: 450px;
+    }
+
+    100% {
+        display: none;
+        height: 0px;
+    }
+}
+
+.msgboxInputcontainer {
+    pointer-events: all;
+    height: auto;
+    flex-shrink: none;
+    border-top: 1px solid $shadow;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+
+    .textareact {
+        border: 0;
+        height: 40px;
+        padding: 0px 6px 0px 6px;
+        outline: none;
+        flex: 1;
+
+        #textInput {
+            outline: none;
+        }
+    }
+
+    .emojionearea {
+        max-height: 40px;
+    }
+
+    .inputsContainer {
+        height: 40px;
+        align-items: center;
+        padding: 3px;
+        display: flex;
+
+        .imageInput, .voiceInput, .fileInput {
+            height: 25px;
+            margin: 2px;
+            width: 25px;
+            border-radius: 3px;
+            background: $transhadow;
+            overflow: hidden;
+            position: relative;
+
+            &:hover {
+                background-color: $shadow;
+            }
+
+            input {
+                opacity: 0;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 500px;
+                height: 500px;
+                font-size: 70;
+                z-index: 100;
+            }
+        }
+    }
+
+    .reorderbox {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: white;
+        padding: 3px 10px;
+        z-index: 50;
+        display: none;
+        justify-content: center;
+        align-items: center;
+
+        &.isrecording {
+            #recordbutton {
+                display: none;
+            }
+
+            .recordstopbtncont {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: row;
+
+                .soundlevel {
+                    width: 25px;
+                    display: flex;
+                    flex-direction: column;
+                    height: 100%;
+
+                    div {
+                        height: 2px;
+                        margin-top: 1px;
+                        background: black;
+                        opacity: 0.3;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+
+                        &.active {
+                            opacity: 1;
+                        }
+                    }
+                }
+
+                #recordstopbutton {
+                    display: flex;
+                }
+            }
+        }
+
+        .recordstopbtncont {
+            display: none;
+
+            #recordstopbutton {
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                background: red;
+                margin: 0 auto;
+                display: none;
+                justify-content: center;
+                flex-direction: column;
+                align-items: center;
+                opacity: 0.8;
+                margin-left: 3px;
+
+
+                i {
+                    color: white;
+                    font-size: 20px;
+                }
+
+                &.isrecording {
+                    animation: fadeinandout 2s infinite;
+                }
+            }
+        }
+
+        #recordbutton {
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            background: black;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+
+            i {
+                color: white;
+                font-size: 20px;
+            }
+        }
+    }
+
+
+    .recordbuttonexit {
+        position: absolute;
+        left: auto;
+        right: 10px;
+        top: 10px;
+
+        &:hover {
+            transform: scale(1.2);
+        }
+    }
+}
+
+@keyframes fadeinandout {
+    0% {
+        opacity: 0.8;
+    }
+
+    50% {
+        opacity: 0.1;
+    }
+
+    100% {
+        opacity: 0.8;
+    }
+}
+
+.emojionearea > .emojionearea-editor {
+    min-height: 40px;
+    max-height: 40px;
+}
+
+#istypingbox {
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    width: auto;
+
+    .first, .second, .third {
+        align-self: flex-end;
+        height: 10px;
+        width: 10px;
+        margin: 2px;
+        border-radius: 50%;
+        background-color: rgb(111,111,111);
+        transform: translateY(13px)
+    }
+
+    .first {
+        animation: typinganim 1.5s infinite;
+        animation-delay: 0s;
+    }
+
+    .second {
+        animation: typinganim 1.5s infinite;
+        animation-delay: 0.15s;
+    }
+
+    .third {
+        animation: typinganim 1.5s infinite;
+        animation-delay: 0.3s;
+    }
+}
+
+@keyframes typinganim {
+    0% {
+        transform: translateY(13px);
+    }
+
+    70% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translateY(13px);
+    }
+}

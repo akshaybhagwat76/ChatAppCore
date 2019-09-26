@@ -1,0 +1,301 @@
+﻿<script src="~/jquery.min.js"></script>
+<link rel="stylesheet" href="~/css/dashboardstyle.css" />
+<link href="~/emojionearea.min.css" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.min.css"
+      crossorigin="anonymous">
+<audio id="newnotaudio" style="display:none" src="/newnot.mp3"></audio>
+<div class="outercont">
+    <!--side nav
+        <div class="sidebarcont">
+        <div class="singleitemm">
+            <i class="fas fa-user"></i>
+        </div>
+        <div class="singleitemm">
+            <i class="fas fa-archway"></i>
+
+        </div>
+        <div class="singleitemm" id="chatsviewbutton">
+            <i class="fas fa-comments"></i>
+            <div id="chaticon">New</div>
+        </div>
+    </div>
+
+        <div class="itemdata">-->
+    <div id="bigimage"><img /></div>
+    <div class="statscont">
+        <div class="statsdiv">
+            <div class="chart" id="chartContainer"></div>
+            <div class="mininfos">
+                <div class="mininfo">
+                    <div class="texthead">Total Chats</div>
+                    <div class="textval" id="totalchatval">999</div>
+                </div>
+                <div class="mininfo">
+                    <div class="texthead">Total Messages</div>
+                    <div class="textval" id="totalmsgs">200</div>
+                </div>
+                <div class="mininfo">
+                    <div class="texthead">Total Visits</div>
+                    <div class="textval" id="totalvisits">123</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="allchats">
+        <div class="messagehead">
+            <div class="messageheadText">Messages</div>
+            <div class="messageheadIcon" id="chartshowbtn"><i class="fas fa-chart-bar"></i></div>
+        </div>
+        <div id="chatdata">
+        </div>
+    </div>
+    <div class="singlechat">
+        <div id="overlaywrapper">
+            <div id="MessageboxMainContainer" style="background:white; z-index:100;" class="minimized">
+                <div class="actualmessagebody">
+
+                    <div class="msgboxBody">
+                        <div class="scrollbarcontainer">
+                            <div class="scrollbar"></div>
+                        </div>
+                        <div class="addFileOVerlay">
+                            Drop file(s) here!
+                        </div>
+                        <div class="scrollbaroverlay">
+                            <div class="singleMessageScroller">
+                                <div class="singleMessage1Container">
+                                    <div id="seentags" style="top:0px;">
+                                        <div class="singleseentag">
+                                            <i class="fas fa-check-circle"></i>
+                                        </div>
+                                    </div>
+                                    <div class="singleMessageContainer">
+
+
+                                        <div class="singleMessage anotheruser" id="istypingmsg">
+                                            <div class="userpic"></div>
+                                            <div class="actualmessage">
+                                                <div class="nametag">Nabin</div>
+                                                <div class="typing" id="istypingbox">
+                                                    <div class="first"></div>
+                                                    <div class="second"></div>
+                                                    <div class="third"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="cannedcont">
+                        <div class="singlecan">
+                            <div class="cannedshort"></div>
+                            <div class="cannedlong"></div>
+                        </div>
+                        <div class="singlecan">
+                            <div class="cannedshort"></div>
+                            <div class="cannedlong"></div>
+                        </div>
+                    </div>
+                    <div class="msgboxInputcontainer inactive">
+                        <div class="textareact">
+                            <textarea id="textInput" placeholder="Type message here...."></textarea>
+                        </div>
+                        <div class="inputsContainer">
+                            <div class="fileInput">
+                                <input type="file" class="imagedata" file accept="image/*">
+                                <i class="fas fa-paperclip" style="padding:6px"></i>
+
+                            </div>
+                            <div id="soundInput">
+                                <i class="fas fa-microphone" style="padding:6px"></i>
+                            </div>
+                        </div>
+                        <div class="reorderbox">
+                            <div id="recordbutton"><i class="fas fa-microphone" style="padding:6px"></i></div>
+                            <div class="recordstopbtncont">
+                                <div id="recordstopbutton" class="isrecording">
+                                    <i class="fa fa-stop-circle" aria-hidden="true" style="padding:6px"></i>
+                                </div>
+                            </div>
+                            <div class="recordbuttonexit">
+
+                                <i class="fas fa-times" id="cancelname"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="userinfo">
+        <div class="singleentry">
+            <div class="datatext">Name:</div>
+            <div class="datavalue" id="curusername"></div>
+        </div>
+        <div class="singleentry">
+            <div class="datatext">Status:</div>
+            <div class="datavalue" id="curuserstatus"></div>
+        </div>
+        <div class="singleentry">
+            <div class="datatext">Email:</div>
+            <div class="datavalue" id="curuseremail"></div>
+        </div>
+        <div class="singleentry">
+            <div class="datatext">ID:</div>
+            <div class="datavalue" id="curuserid"></div>
+        </div>
+        <div class="singleentry">
+            <div class="datatext">Phone:</div>
+            <div class="datavalue" id="curuserphone"></div>
+        </div>
+        <div class="singleentry">
+            <div class="datatext">Country:</div>
+            <div class="datavalue" id="curusercountry"></div>
+        </div>
+        <div class="singleentry">
+            <div class="datatext">City:</div>
+            <div class="datavalue" id="curusercity"></div>
+        </div>
+        <div class="singleentry">
+            <div class="datatext">IP:</div>
+            <div class="datavalue" id="curuserip"></div>
+        </div>
+        <a class="mutebtn">Mute this conversation</a>
+        <a class="deletebtn">Delete this conversation</a>
+    </div>
+
+    @*<div class="singleitemdata incomingchat">
+            <div class="title">Chat</div>
+            <div class="contentcont">
+                <div class="chatsview">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>IP</th>
+                                <th>Country</th>
+                                <th>City</th>
+                                <th>Active</th>
+                            </tr>
+                        </thead>
+                        <tbody id="chatdata">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="chatview">
+                    <div id="overlaywrapper">
+                        <div id="MessageboxMainContainer" style="background:white; z-index:100;" class="minimized">
+                            <div class="actualmessagebody">
+                                <div id="MessageboxHeader">
+                                    <div class="UserDetails">
+                                        <div class="Username"></div>
+                                        <div class="UserActiveStatus"></div>
+                                    </div>
+
+                                </div>
+                                <div class="msgboxBody">
+                                    <div class="scrollbarcontainer">
+                                        <div class="scrollbar"></div>
+                                    </div>
+                                    <div class="addFileOVerlay">
+                                        Drop file(s) here!
+                                    </div>
+                                    <div class="scrollbaroverlay">
+                                        <div class="singleMessageScroller">
+                                            <div class="singleMessage1Container">
+                                                <div id="seentags" style="top:0px;">
+                                                    <div class="singleseentag">
+                                                        <i class="fas fa-check-circle"></i>
+                                                    </div>
+                                                </div>
+                                                <div class="singleMessageContainer">
+
+
+                                                    <div class="singleMessage anotheruser" id="istypingmsg">
+                                                        <div class="userpic"></div>
+                                                        <div class="actualmessage">
+                                                            <div class="nametag">Nabin</div>
+                                                            <div class="typing" id="istypingbox">
+                                                                <div class="first"></div>
+                                                                <div class="second"></div>
+                                                                <div class="third"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div id="cannedcont">
+                                    <div class="singlecan">
+                                        <div class="cannedshort"></div>
+                                        <div class="cannedlong"></div>
+                                    </div>
+                                    <div class="singlecan">
+                                        <div class="cannedshort"></div>
+                                        <div class="cannedlong"></div>
+                                    </div>
+                                </div>
+                                <div class="msgboxInputcontainer">
+                                    <div class="textareact">
+                                        <textarea id="textInput" placeholder="Type message here...."></textarea>
+                                    </div>
+                                    <div class="inputsContainer">
+                                        <div class="fileInput">
+                                            <input type="file" class="imagedata" file accept="image/*">
+                                            <i class="fas fa-paperclip" style="padding:6px"></i>
+
+                                        </div>
+                                        <div id="soundInput">
+                                            <i class="fas fa-microphone" style="padding:6px"></i>
+                                        </div>
+                                    </div>
+                                    <div class="reorderbox">
+                                        <div id="recordbutton"><i class="fas fa-microphone" style="padding:6px"></i></div>
+                                        <div class="recordstopbtncont">
+                                            <div class="soundlevel">
+                                                <div id="slevel10"></div>
+                                                <div id="slevel9"></div>
+                                                <div id="slevel8"></div>
+                                                <div id="slevel7"></div>
+                                                <div id="slevel6"></div>
+                                                <div id="slevel5"></div>
+                                                <div id="slevel4"></div>
+                                                <div id="slevel3"></div>
+                                                <div id="slevel2"></div>
+                                                <div id="slevel1"></div>
+                                            </div>
+                                            <div id="recordstopbutton" class="isrecording">
+                                                <i class="fa fa-stop-circle" aria-hidden="true" style="padding:6px"></i>
+                                            </div>
+                                        </div>
+                                        <div class="recordbuttonexit">
+
+                                            <i class="fas fa-times" id="cancelname"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+</div>
+
+<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/mervick/emojionearea/master/dist/emojionearea.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.js"></script>
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/dashboardscript.js"></script>
