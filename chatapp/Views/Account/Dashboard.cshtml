@@ -28,16 +28,42 @@
             <div class="chart" id="chartContainer"></div>
             <div class="mininfos">
                 <div class="mininfo">
-                    <div class="texthead">Total Chats</div>
-                    <div class="textval" id="totalchatval">999</div>
+                    <div class="texthead">Active Visitors</div>
+                    <div class="textval" id="totalactivevisitors"></div>
                 </div>
                 <div class="mininfo">
                     <div class="texthead">Total Messages</div>
-                    <div class="textval" id="totalmsgs">200</div>
+                    <div class="srow">
+                        <div class="txts">
+                            <div class="subhead" id="totalmsgs">Total</div>
+                            <div class="subhead" id="totalmsgsval"></div>
+                        </div>
+                        <div class="txts">
+                            <div class="subhead" id="totalmsgs">Today</div>
+                            <div class="subhead" id="todaymsgsval"></div>
+                        </div>
+                    </div>
+                    <div class="lastsvn" id="totalmsgs">
+                        <div class="mytxt">Last 7 days</div>
+                        <div class="myval" id="msgslastsevendays"></div>
+                    </div>
                 </div>
                 <div class="mininfo">
-                    <div class="texthead">Total Visits</div>
-                    <div class="textval" id="totalvisits">123</div>
+                    <div class="texthead">Total Chats</div>
+                    <div class="srow">
+                        <div class="txts">
+                            <div class="subhead" id="totalmsgs">Total</div>
+                            <div class="subhead" id="totalchatval"></div>
+                        </div>
+                        <div class="txts">
+                            <div class="subhead" id="totalmsgs">Today</div>
+                            <div class="subhead" id="todaychatval"></div>
+                        </div>
+                    </div>
+                    <div class="lastsvn" id="totalmsgs">
+                        <div class="mytxt">Last 7 days </div>
+                        <div class="myval" id="chatslastsevendays"></div>
+                             </div>
                 </div>
             </div>
         </div>
@@ -148,6 +174,10 @@
         <div class="singleentry">
             <div class="datatext">ID:</div>
             <div class="datavalue" id="curuserid"></div>
+        </div>
+        <div class="singleentry">
+            <div class="datatext">Site:</div>
+            <div class="datavalue" id="curusersite"></div>
         </div>
         <div class="singleentry">
             <div class="datatext">Phone:</div>
@@ -293,7 +323,7 @@
 
 </div>
 
-<script type="text/javascript" src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script type="text/javascript" src="~/js/apexcharts.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.rawgit.com/mervick/emojionearea/master/dist/emojionearea.min.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/recorderjs/0.1.0/recorder.js"></script>

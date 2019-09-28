@@ -9,6 +9,7 @@ var lastmsg;
 var initialized = false;
 var windowVisible = true;
 var onwindowvisible = null;
+var curplayingaud = null;
 connection.on("ReceiveMessage", function (group, user, message, msgid) {
     for (var i = 0; i < message.length - 2; i++) {
         if (message[i] == '\n')
@@ -100,7 +101,7 @@ document.addEventListener("visibilitychange", () => {
         windowVisible = false;
 });
 function fetchdata() {
-    connection.invoke("CreateAnonChat", document.querySelector("#inputname").value, document.querySelector("#inputemail").value, document.querySelector("#inputphone").value).catch(function (err) {
+    connection.invoke("CreateAnonChat", document.querySelector("#inputname").value, document.querySelector("#inputemail").value, document.querySelector("#inputphone").value, window.location.href ).catch(function (err) {
         return console.error(err.toString());
     }).then(() => {
         fetchuserdata();
@@ -300,8 +301,11 @@ class Messagebox {
 
         itm.querySelector("audio").addEventListener("loadedmetadata", () => {
             itm.querySelector("#playctrls").addEventListener("click", function (e) {
-                console.log(itm);
                 if (itm.querySelector("audio").duration > 0 && itm.querySelector("audio").paused) {
+                    if (curplayingaud != null) {
+                        curplayingaud.pause();
+                    }
+                    curplayingaud = itm.querySelector("audio");
                     itm.querySelector("audio").play();
                     itm.querySelector('.info').innerHTML = parseInt(itm.querySelector("audio").currentTime / 60) + ":" + parseInt(itm.querySelector("audio").currentTime % 60) + " / " + parseInt(itm.querySelector("audio").duration / 60) + ":" + parseInt(itm.querySelector("audio").duration % 60);
                     itm.querySelector("#pausebtn").style.display = "block";
@@ -311,6 +315,8 @@ class Messagebox {
                     itm.querySelector('.info').innerHTML = parseInt(itm.querySelector("audio").currentTime / 60) + ":" + parseInt(itm.querySelector("audio").currentTime % 60) + " / " + parseInt(itm.querySelector("audio").duration / 60) + ":" + parseInt(itm.querySelector("audio").duration % 60);
                     if (timeout != null)
                         clearInterval(timeout);
+                    curplayingaud = null;
+
                     itm.querySelector("audio").pause();
                     itm.querySelector("#pausebtn").style.display = "none";
                     itm.querySelector("#playbtn").style.display = "block";
@@ -319,7 +325,12 @@ class Messagebox {
             itm.querySelector("audio").addEventListener("timeupdate", function (e) {
                 itm.querySelector('.info').innerHTML = parseInt(itm.querySelector("audio").currentTime / 60) + ":" + parseInt(itm.querySelector("audio").currentTime % 60) + " / " + parseInt(itm.querySelector("audio").duration / 60) + ":" + parseInt(itm.querySelector("audio").duration % 60);
             });
+            itm.querySelector("audio").addEventListener("pause", function (e) {
+                itm.querySelector("#pausebtn").style.display = "none";
+                itm.querySelector("#playbtn").style.display = "block";
+            });
             itm.querySelector("audio").addEventListener("ended", function (e) {
+                curplayingaud = null;
                 itm.querySelector('.info').innerHTML = parseInt(itm.querySelector("audio").duration / 60) + ":" + parseInt(itm.querySelector("audio").duration % 60);
                 itm.querySelector("#pausebtn").style.display = "none";
                 itm.querySelector("#playbtn").style.display = "block";
@@ -353,7 +364,7 @@ class Messagebox {
         document.querySelector(".singleMessageContainer").insertBefore(itm, me);
 
         scroller.redo();
-        this.inputbox.editor.blur();
+        //this.inputbox.editor.blur();
 
     }
     addfileData(user, link, filename, msgid) {
@@ -464,7 +475,6 @@ class Messagebox {
             }
         });
         this.bodybox.querySelector("#MessageboxHeader").addEventListener("click", function (e) {
-            console.log(e.target);
             if (!initialized) {
                 initialized = true;
             }
@@ -504,7 +514,8 @@ class Messagebox {
         this.recordbuttonexit.addEventListener("click", function (e) {
             _that.reorderbox.style.display = "none";
             if (audisrecording != null) {
-                stopRecording();
+                if (audisrecording==true)
+                    stopRecording();
                 if (_that.recordbutton.classList.contains("isrecording")) {
                     _that.recordbutton.classList.remove("isrecording");
                 }
@@ -549,6 +560,12 @@ class Messagebox {
         });
         this.inputbox.on("keyup", function (b, e) {
             _that.draghandled = false;
+            if (_that.iamtyping == false && _that.inputbox.getText().length > 0) {
+                _that.iamtyping = true;
+                connection.invoke("isTyping", groupid).catch(function (err) {
+                    return console.error(err.toString());
+                });
+            }
             var val = _that.inputbox.getText();
             var slashpos = -1;
             for (var i = val.length - 1; i >= 0; i--) {
@@ -650,13 +667,12 @@ class Messagebox {
                     return;
                 }
 
-                console.log("text " + _that.inputbox.getText());
                 _that.sendTextMessage(_that.inputbox.getText());
                 _that.inputbox.setText("");
             }
         });
         this.inputbox.on("focus", function (b, e) {
-            if (_that.iamtyping == false) {
+            if (_that.iamtyping == false && _that.inputbox.getText().length > 0) {
                 _that.iamtyping = true;
                 connection.invoke("isTyping", groupid).catch(function (err) {
                     return console.error(err.toString());
@@ -677,7 +693,7 @@ class Messagebox {
     }
 }
 var msgbox, scroller;
-document.addEventListener("DOMContentLoaded", function () {
+function setup() {
     //jQuery.noConflict();
     $("#textInput").emojioneArea({
         pickerPosition: "top",
@@ -717,7 +733,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     document.querySelector("#seentags").children[0].style.top = "0px";
     document.querySelector(".singleMessageContainer").innerHTML = "<div class='singleMessage anotheruser' id='istypingmsg'><div class='userpic'></div><div class='actualmessage'><div class='nametag'>Nabin</div><div class='typing' id='istypingbox'><div class='first'></div><div class='second'></div><div class='third'></div></div></div></div>";
-});
+};
 function dropHandler(ev) {
     console.log('File(s) dropped');
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using chatapp;
 
 namespace chatapp.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190927102111_abcd")]
+    partial class abcd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,7 +118,7 @@ namespace chatapp.Migrations
                     b.ToTable("AspNetUsers");
 
                     b.HasData(
-                        new { Id = "e53e170e-570e-4204-9c57-541c3ee984f7", AccessFailedCount = 0, ConcurrencyStamp = "2157689d-95fd-4fd5-96fd-e84bf80d82a8", EmailConfirmed = false, LockoutEnabled = false, PasswordHash = "AQAAAAEAACcQAAAAEEi19p61djfkbJalu/jPIcbYE5zonHAn8Nr4yUc66WvaMFFTiw2vmL/l8OSaFClvjg==", PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "admin", lastActiveTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
+                        new { Id = "efae861e-c485-4766-b329-91e08ce7263c", AccessFailedCount = 0, ConcurrencyStamp = "4ffe989c-38e9-402e-bad2-ea866499e180", EmailConfirmed = false, LockoutEnabled = false, PasswordHash = "AQAAAAEAACcQAAAAENSkYIr8Yp4AvCn2+PE3m/klgX/GXRs2kcQp7MPaKw85vYSIyEwNbtw5Jdb2mxFBRw==", PhoneNumberConfirmed = false, TwoFactorEnabled = false, UserName = "admin", lastActiveTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) }
                     );
                 });
 
@@ -134,9 +136,9 @@ namespace chatapp.Migrations
                     b.ToTable("cannedResponses");
 
                     b.HasData(
-                        new { ID = "0aa22f2e-88f7-4484-b61a-ce9111768964", longform = "Hello", shortform = "/hl" },
-                        new { ID = "7861ba9e-ad93-436e-9b61-c877ff70739b", longform = "Good Morning", shortform = "/gdm" },
-                        new { ID = "a99b0787-b24d-4405-91b7-41b8e0880da6", longform = "Good Night", shortform = "/gdn" }
+                        new { ID = "c86ae1f8-417c-4aea-9541-47adc45b87e3", longform = "Hello", shortform = "/hl" },
+                        new { ID = "ae84ec45-0f8f-4450-a315-f7719542081e", longform = "Good Morning", shortform = "/gdm" },
+                        new { ID = "04e4e757-edb4-42e5-bf64-be24e1c178e5", longform = "Good Night", shortform = "/gdn" }
                     );
                 });
 

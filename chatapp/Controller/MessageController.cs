@@ -109,7 +109,7 @@ namespace chatapp
             long size = fileUploadModel.files.Sum(f => f.Length);
 
             // full path to file in temp location
-            string filepath = "";
+            string filepath = "";   
             foreach (var formFile in fileUploadModel.files)
             {
                 var guid = Guid.NewGuid().ToString("N");

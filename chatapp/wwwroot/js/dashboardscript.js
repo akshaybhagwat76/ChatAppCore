@@ -16,6 +16,7 @@ var monthlystats = null;
 var totalchats = null;
 var totalintruders = null;
 var totalmessages = null;
+var curplayingaud=null;
 connection.on("ReceiveMessage", function (groupID, user, message, msgid) {
     putgrouptofirst(groupID);
     if (curgroupindex == -1 || groups[curgroupindex].id != groupID) {
@@ -46,13 +47,30 @@ connection.on("ReceiveMessage", function (groupID, user, message, msgid) {
 connection.on("yourid", function (id) {
     myid = id;
 });
-connection.on("totalmessage", function (id) {
-    totalmessages = id;
-    document.querySelector("#totalmsgs").innerHTML = totalmessages;
+connection.on("totalmessage", function (tot,today,lastseven,lastforteen) {
+    document.querySelector("#totalmsgsval").innerHTML = tot;
+    document.querySelector("#todaymsgsval").innerHTML = today;
+    var diff = lastforteen - lastseven;
+    if (diff <= lastseven) {
+        document.querySelector("#msgslastsevendays").innerHTML = (lastseven - diff) + "<i class='fas fa-arrow-circle-up' style='color:green;margin-left:10px;'></i>";
+    }
+    else {
+        document.querySelector("#msgslastsevendays").innerHTML = (diff - lastseven) + "<i class='fas fa-arrow-circle-down' style='color:green;margin-left:10px;'></i>";
+    }
 });
-connection.on("totalchats", function (id) {
-    totalchats = id;
-    document.querySelector("#totalchatval").innerHTML = totalchats;
+connection.on("totalchats", function (tot,today,lastseven,lastforteen) {
+    document.querySelector("#totalchatval").innerHTML = tot;
+    document.querySelector("#todaychatval").innerHTML = today;
+    var diff = lastforteen - lastseven;
+    if (diff <= lastseven) {
+        document.querySelector("#chatslastsevendays").innerHTML = (lastseven - diff) + "<i class='fas fa-arrow-circle-up' style='color:green;margin-left:10px;'></i>";
+    }
+    else {
+        document.querySelector("#chatslastsevendays").innerHTML = (diff - lastseven) + "<i class='fas fa-arrow-circle-down' style='color:green;margin-left:10px;'></i>";
+    }
+});
+connection.on("totalactiveusers", function (id) {
+    document.querySelector("#totalactivevisitors").innerHTML = id;
 });
 connection.on("canneds", function (id) {
     msgbox.canneds = id;
@@ -68,6 +86,7 @@ connection.on("userdeleted", function (id) {
     document.querySelector("#curusercountry").innerHTML = "";
     document.querySelector("#curusercity").innerHTML = "";
     document.querySelector("#curuserip").innerHTML = "";
+    document.querySelector("#curusersite").innerHTML = "";
     groups.splice(groups.indexOf(groups.find(x => x.id == id)), 1);
     document.querySelector("#chatdata").removeChild(document.querySelector("#chatdata").querySelector("[data='" + id + "']"));
 });
@@ -77,32 +96,103 @@ connection.on("totalintruders", function (id) {
 });
 connection.on("monthlydata", function (id) {
     monthlystats = JSON.parse(id);
-    var dataPoints= [];
-    for (var i = 0; i < monthlystats.length; i++) {
-        dataPoints.push({ x: new Date(monthlystats[i].Year, monthlystats[i].Month), y: monthlystats[i].Total })
-    }
-    var chart = new CanvasJS.Chart("chartContainer",
-        {
-            title: {
-                text: "Views"
+    var options = {
+        chart: {
+            type: "area",
+            height: document.querySelector("#chartContainer").getBoundingClientRect().height,
+            foreColor: "#999",
+            scroller: {
+                enabled: true,
+                track: {
+                    height: 7,
+                    background: '#e0e0e0'
+                },
+                thumb: {
+                    height: 10,
+                    background: '#94E3FF'
+                },
+                scrollButtons: {
+                    enabled: true,
+                    size: 9,
+                    borderWidth: 2,
+                    borderColor: '#008FFB',
+                    fillColor: '#008FFB'
+                },
             },
-            axisX: {
-                title: "Timeline",
-                gridThickness: 2
+            stacked: true,
+            dropShadow: {
+                enabled: true,
+                enabledSeries: [0],
+                top: -2,
+                left: 2,
+                blur: 5,
+                opacity: 0.06
+            }
+        },
+        colors: ['#00E396'],
+        stroke: {
+            curve: "smooth",
+            width: 3
+        },
+        dataLabels: {
+            enabled: false
+        },
+        series: [{
+            name: 'Total Views',
+            data: generateDayWiseTimeSeries(0, monthlystats.totals.length)
+        }],
+        markers: {
+            size: 0,
+            strokeColor: "#fff",
+            strokeWidth: 3,
+            strokeOpacity: 1,
+            fillOpacity: 1,
+            hover: {
+                size: 6
+            }
+        },
+        xaxis: {
+            type: "datetime",
+            axisBorder: {
+                show: false
             },
-            axisY: {
-                title: "No of viewers"
+            axisTicks: {
+                show: false
+            }
+        },
+        yaxis: {
+            labels: {
+                offsetX: 24,
+                offsetY: -5
             },
-            data: [
-                {
-                    type: "area",
-                    dataPoints: dataPoints
+            tooltip: {
+                enabled: true
+            }
+        },
+        grid: {
+            padding: {
+                left: -5,
+                right: 5
+            }
+        },
+        tooltip: {
+            x: {
+                format: "dd MMM yyyy"
+            },
+        },
+        legend: {
+            position: 'top',
+            horizontalAlign: 'left'
+        },
+        fill: {
+            type: "solid",
+            fillOpacity: 0.7
+        }
+    };
 
-                }
-            ]
-        });
-
+    var chart = new ApexCharts(document.querySelector("#chartContainer"), options);
     chart.render();
+
 });
 
 connection.on("istypingres", function (id, grpid) {
@@ -199,6 +289,7 @@ connection.on("newGroup", function (data) {
         "phone": data.phone,
         "city": data.city,
         "active": data.active,
+        "site": data.site,
         "lastTime": data.lastTime,
         "messages": [],
         "msgloaded": false
@@ -228,6 +319,7 @@ connection.on("getGroups", function (data) {
             "email": data[i].email,
             "phone": data[i].phone,
             "city": data[i].city,
+            "site": data[i].site,
             "active": data[i].active,
             "lastTime": data[i].lastTime,
             "messages": [],
@@ -236,6 +328,18 @@ connection.on("getGroups", function (data) {
     }
 });
 
+function generateDayWiseTimeSeries(s, count) {
+    var values = [monthlystats.totals];
+    var i = 0;
+    var series = [];
+    var x = new Date(monthlystats.Day + " " + monthlystats.Month + " " + monthlystats.Year).getTime();
+    while (i < count) {
+        series.push([x, values[s][i]]);
+        x += 86400000;
+        i++;
+    }
+    return series;
+}
 function changeGroupdata(uid) {
     const elem = document.querySelector("#chatdata").querySelector("[data='" + uid + "']");
     var id = groups.indexOf(groups.find(x=>x.id==uid));
@@ -305,6 +409,7 @@ function groupIDChanged() {
     document.querySelector("#curuseremail").innerHTML = groups[curgroupindex].email;
     document.querySelector("#curuserid").innerHTML = groups[curgroupindex].id;
     document.querySelector("#curuserphone").innerHTML = groups[curgroupindex].phone;
+    document.querySelector("#curusersite").innerHTML = groups[curgroupindex].site;
     document.querySelector("#curusercountry").innerHTML = groups[curgroupindex].country;
     document.querySelector("#curusercity").innerHTML = groups[curgroupindex].city;
     document.querySelector("#curuserip").innerHTML = groups[curgroupindex].IP;
@@ -569,8 +674,11 @@ class Messagebox {
 
         itm.querySelector("audio").addEventListener("loadedmetadata", () => {
             itm.querySelector("#playctrls").addEventListener("click", function (e) {
-                console.log(itm);
                 if (itm.querySelector("audio").duration > 0 && itm.querySelector("audio").paused) {
+                    if (curplayingaud != null) {
+                        curplayingaud.pause();
+                    }
+                    curplayingaud = itm.querySelector("audio");
                     itm.querySelector("audio").play();
                     itm.querySelector('.info').innerHTML = parseInt(itm.querySelector("audio").currentTime / 60) + ":" + parseInt(itm.querySelector("audio").currentTime % 60) + " / " + parseInt(itm.querySelector("audio").duration / 60) + ":" + parseInt(itm.querySelector("audio").duration % 60);
                     itm.querySelector("#pausebtn").style.display = "block";
@@ -581,6 +689,7 @@ class Messagebox {
                     if (timeout != null)
                         clearInterval(timeout);
                     itm.querySelector("audio").pause();
+                    curplayingaud = null;
                     itm.querySelector("#pausebtn").style.display = "none";
                     itm.querySelector("#playbtn").style.display = "block";
                 }
@@ -588,7 +697,12 @@ class Messagebox {
             itm.querySelector("audio").addEventListener("timeupdate", function (e) {
                 itm.querySelector('.info').innerHTML = parseInt(itm.querySelector("audio").currentTime / 60) + ":" + parseInt(itm.querySelector("audio").currentTime % 60) + " / " + parseInt(itm.querySelector("audio").duration / 60) + ":" + parseInt(itm.querySelector("audio").duration % 60);
             });
+            itm.querySelector("audio").addEventListener("pause", function (e) {
+                itm.querySelector("#pausebtn").style.display = "none";
+                itm.querySelector("#playbtn").style.display = "block";
+            });
             itm.querySelector("audio").addEventListener("ended", function (e) {
+                curplayingaud = null;
                 itm.querySelector('.info').innerHTML = parseInt(itm.querySelector("audio").duration / 60) + ":" + parseInt(itm.querySelector("audio").duration % 60);
                 itm.querySelector("#pausebtn").style.display = "none";
                 itm.querySelector("#playbtn").style.display = "block";
@@ -621,7 +735,7 @@ class Messagebox {
         document.querySelector(".singleMessageContainer").insertBefore(itm, document.querySelector(".singleMessageContainer").lastChild);
 
         scroller.redo();
-        this.inputbox.editor.blur();
+        //this.inputbox.editor.blur();
     }
     addfileData(user, link, filename, msgid) {
         var itm = document.createElement("div");
@@ -721,7 +835,8 @@ class Messagebox {
         this.recordbuttonexit.addEventListener("click", function (e) {
             _that.reorderbox.style.display = "none";
             if (audisrecording != null) {
-                stopRecording();
+                if (audisrecording==true)
+                    stopRecording();
                 if (_that.recordbutton.classList.contains("isrecording")) {
                     _that.recordbutton.classList.remove("isrecording");
                 }
@@ -767,6 +882,12 @@ class Messagebox {
         });
         this.inputbox.on("keyup", function (b, e) {
             _that.draghandled = false;
+            if (_that.iamtyping == false && _that.inputbox.getText().length > 0) {
+                _that.iamtyping = true;
+                connection.invoke("isTyping", groups[curgroupindex].id).catch(function (err) {
+                    return console.error(err.toString());
+                });
+            }
             var val = _that.inputbox.getText();
             var slashpos = -1;
             for (var i = val.length - 1; i >= 0; i--) {
@@ -867,14 +988,12 @@ class Messagebox {
                     //placeCaretAtEnd(e.target);
                     return;
                 }
-
-                console.log("text " + _that.inputbox.getText());
                 _that.sendTextMessage(_that.inputbox.getText());
                 _that.inputbox.setText("");
             }
         });
         this.inputbox.on("focus", function (b, e) {
-            if (_that.iamtyping == false) {
+            if (_that.iamtyping == false && _that.inputbox.getText().length>0) {
                 _that.iamtyping = true;
                 connection.invoke("isTyping", groups[curgroupindex].id).catch(function (err) {
                     return console.error(err.toString());
@@ -968,7 +1087,7 @@ document.addEventListener("DOMContentLoaded", function () {
         connection.invoke("getMessageCount").catch(function (err) {
             return console.error(err.toString());
         });
-        connection.invoke("getIntrudersCount").catch(function (err) {
+        connection.invoke("getActiveCount").catch(function (err) {
             return console.error(err.toString());
         });
         connection.invoke("getChatsCount").catch(function (err) {

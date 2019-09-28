@@ -51,7 +51,7 @@ namespace chatapp
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer("Server=DESKTOP-R6KTPLT;Database=chat;User Id=sa;Password=sa123;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                options.UseSqlServer("Server=DESKTOP-2L5MSLV;Database=chat;User Id=sa;Password=sa123;Trusted_Connection=True;MultipleActiveResultSets=true"));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

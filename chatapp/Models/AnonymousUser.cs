@@ -13,6 +13,7 @@ namespace chatapp.Models
         public string Phone { get; set; }
         public string IP { get; set; }
         public string Email { get; set; }
+        public string Site { get; set; }
         public string connectionID { get; set; }
         public string country { get; set; }
         public string city { get; set; }

@@ -9,6 +9,7 @@ using chatapp;
 using chatapp.Models;
 using FreeGeoIPCore;
 using System.Security.Claims;
+using System.Globalization;
 
 namespace chatapp
 {
@@ -156,7 +157,7 @@ namespace chatapp
             var res = new List<grouplistresponse>();
             foreach (var anon in allanons)
             {
-                res.Add(new grouplistresponse() { anonid=anon.ID,name = anon.Name, IP= anon.IP,country=anon.country,city=anon.city, newMessageseen = anon.seenByUser,lastTime= TimeAgo(anon.LastActiveTime),active=anon.isActive,email=anon.Email,phone=anon.Phone });
+                res.Add(new grouplistresponse() { anonid=anon.ID,name = anon.Name, IP= anon.IP,country=anon.country,city=anon.city, newMessageseen = anon.seenByUser,lastTime= TimeAgo(anon.LastActiveTime),active=anon.isActive,email=anon.Email,phone=anon.Phone,site=anon.Site });
             }
             await Clients.Caller.SendAsync("getGroups", Newtonsoft.Json.JsonConvert.SerializeObject(res));
             await AddActiveUser();
@@ -186,11 +187,11 @@ namespace chatapp
             }
             await Clients.Caller.SendAsync("givengroupmessage", Newtonsoft.Json.JsonConvert.SerializeObject(res), uid);
         }
-        public async Task CreateAnonChat(string name,string email,string phone)
+        public async Task CreateAnonChat(string name,string email,string phone, string url)
         {
             FreeGeoIPClient ipClient = new FreeGeoIPClient();
             var ip = _accessor.HttpContext?.Connection?.RemoteIpAddress?.ToString();
-            var usr = new AnonymousUser() { connectionID = Context.ConnectionId, IP = ip ,Name=name,Phone=phone,Email=email,LastActiveTime=DateTime.Now,isActive=true};
+            var usr = new AnonymousUser() { connectionID = Context.ConnectionId, IP = ip ,Name=name,Phone=phone,Email=email,LastActiveTime=DateTime.Now,isActive=true,Site=url};
             try
             {
                 FreeGeoIPCore.Models.Location location = ipClient.GetLocation(ip).Result;
@@ -214,7 +215,7 @@ namespace chatapp
             foreach (var loggeduser in loggedinUsers)
             {
                 await Groups.AddToGroupAsync(loggeduser.ConnectionID, usr.ID);
-                var newgrp = new grouplistresponse { city=usr.city,country=usr.country,anonid= usr.ID, IP=ip,name=usr.Name, newMessageseen = usr.seenByUser, lastTime = TimeAgo(usr.LastActiveTime), active = usr.isActive, email = usr.Email, phone = usr.Phone };
+                var newgrp = new grouplistresponse { city=usr.city,country=usr.country,anonid= usr.ID, IP=ip,name=usr.Name, newMessageseen = usr.seenByUser, lastTime = TimeAgo(usr.LastActiveTime), active = usr.isActive, email = usr.Email, phone = usr.Phone, site=usr.Site };
                 await Clients.Client(loggeduser.ConnectionID).SendAsync("newGroup", Newtonsoft.Json.JsonConvert.SerializeObject(newgrp));
             }
             _dbContext.SaveChanges();
@@ -266,29 +267,56 @@ namespace chatapp
         }
         public async Task getMessageCount()
         {
-            await Clients.Caller.SendAsync("totalmessage", _dbContext.chatmessage.Count());
-
-        }
-        public async Task getIntrudersCount()
-        {
-            await Clients.Caller.SendAsync("totalchats", _dbContext.anonusers.Count());
+            await Clients.Caller.SendAsync("totalmessage", _dbContext.chatmessage.Count(),
+                 _dbContext.chatmessage.Where(x =>
+                    x.datetime.Day == DateTime.Now.Day && x.datetime.Month == DateTime.Now.Month && x.datetime.Year == DateTime.Now.Year).Count(),
+                _dbContext.chatmessage.Where(x => x.datetime > DateTime.Now.AddDays(-7)).Count(),
+                _dbContext.chatmessage.Where(x => x.datetime > DateTime.Now.AddDays(-14)).Count());
         }
         public async Task getChatsCount()
         {
-            await Clients.Caller.SendAsync("totalintruders", _dbContext.anonusers.Where(x=>x.lastmsgID!=null).Count());
+            await Clients.Caller.SendAsync("totalchats", _dbContext.anonusers.Count(),
+                _dbContext.anonusers.Where(x => 
+                    x.LastActiveTime.Day== DateTime.Now.Day&& x.LastActiveTime.Month == DateTime.Now.Month&& x.LastActiveTime.Year == DateTime.Now.Year).Count(),
+                _dbContext.anonusers.Where(x => x.LastActiveTime > DateTime.Now.AddDays(-7)).Count(),
+                _dbContext.anonusers.Where(x => x.LastActiveTime > DateTime.Now.AddDays(-14)).Count());
+        }
+        public async Task getActiveCount()
+        {
+            await Clients.Caller.SendAsync("totalactiveusers", _dbContext.anonusers.Where(x=>x.isActive==true).Count());
         }
         public async Task getMonthlyData()
         {
-            var model=_dbContext.views.OrderByDescending(x => x.date)
-                .GroupBy(x => new { x.date.Year, x.date.Month })
-                // Bonus: You can use this on a drop down
-                .Select(x => new DateTimeList
+            var model = new DateTimeList();
+            model.totals = new List<int>();
+            var earliestdate = _dbContext.views.OrderBy(x => x.date).First();
+            var latestdate = _dbContext.views.OrderByDescending(x => x.date).First();
+            if (earliestdate == null)
+            {
+                await Clients.Caller.SendAsync("monthlydata", "");
+            }
+            model.Day = earliestdate.date.Day;
+            model.Month = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(earliestdate.date.Month).Substring(0,3);
+            model.Year = earliestdate.date.Year;
+
+            if (earliestdate.date.Year == latestdate.date.Year && earliestdate.date.Month == latestdate.date.Month && earliestdate.date.Day == latestdate.date.Day)
+            {
+                model.totals.Add(_dbContext.views.Where(x => x.date.Year == earliestdate.date.Year &&
+                    x.date.Month == earliestdate.date.Month &&
+                    x.date.Day == earliestdate.date.Day).Count());
+            }
+            else
+            {
+                while (true)
                 {
-                    Year = string.Format("{0}", x.Key.Year),
-                    Month = string.Format("{0}", x.Key.Month),
-                    Total = string.Format("{0}", x.Count())
-                })
-                .ToList();
+                    model.totals.Add(_dbContext.views.Where(x => x.date.Year == earliestdate.date.Year &&
+                    x.date.Month == earliestdate.date.Month &&
+                    x.date.Day == earliestdate.date.Day).Count());
+                    earliestdate.date=earliestdate.date.AddDays(1);
+                    if (earliestdate.date.Year == latestdate.date.Year && earliestdate.date.Month == latestdate.date.Month && earliestdate.date.Day == latestdate.date.Day)
+                        break;
+                }
+            }
             await Clients.Caller.SendAsync("monthlydata", Newtonsoft.Json.JsonConvert.SerializeObject(model));
         }
         public ChatHub(ApplicationDbContext dbContext, UserManager<ApplicationUser> userManager, IHttpContextAccessor accessor)
@@ -340,9 +368,10 @@ namespace chatapp
 
     class DateTimeList
     {
+        public object Day { get; set; }
         public object Month { get; set; }
         public object Year { get; set; }
-        public object Total { get; set; }
+        public List<int> totals { get; set; }
     }
 
     class grouplistresponse
@@ -357,6 +386,7 @@ namespace chatapp
         public string anonid { get; set; }
         public bool active { get; set; }
         public string lastTime { get; set; }
+        public string site { get; set; }
     }
     class chatmessageresponse
     {
